@@ -20,6 +20,22 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     url = "https://twitter.com/berkelcaglar"
 
 [params]
+    mainSections = ["post"]
+
+    description = ""
+
+    # path to the favicon, under "static"
+    favicon = "favicon.ico"
+
+    [params.logo]
+    url = "logo.png"
+    width = 50
+    height = 50
+    alt = "Logo"
+
+    [params.icon]
+    
+    url = "favicon.ico"
 
     # options for highlight.js (version, additional languages, and theme)
     highlightjsVersion = "9.12.0"
