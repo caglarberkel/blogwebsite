@@ -1,0 +1,4 @@
+---
+output: html_document
+---
+https://caglarberkel.netlify.com/*  https://caglarberkel.rbind.io/:splat  301!
