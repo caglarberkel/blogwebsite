@@ -1,4 +1,4 @@
-baseurl = "/"
+baseurl = "https://caglarberkel.rbind.io//"
 languageCode = "en-us"
 title = "Caglar Berkel"
 theme = "hugo-lithium"
