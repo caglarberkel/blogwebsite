@@ -9,7 +9,7 @@ tags:
   - Data Science
 ---
 
-Recently, I have been thinking on how to visualize my experimental data where I performed combination drug treatments on certain cancer cell lines, for a paper I am writing. In short, I used two different inhibitor molecules alone or in combination, and measured a response variable (percent cell viability in my case). First, I drew side-by-side boxplots for each case (drugs alone in different concentrations and drugs in combination applied with previously selected concentrations) using ggplot and I thought it was not so easy for the reader to interpret the data as he/she should be. Then, while I was reading Hands-On Machine Learning with R by Bradley Boehmke & Brandon Greenwell, I got an idea on how to better visualize my data. I decided to use scatter3D function in plot3D R package. Here is an example of one of my figures:
+Recently, I have been thinking on how to visualize my experimental data where I performed combination drug treatments on certain cancer cell lines, for a paper I am writing. In short, I used two different inhibitor molecules alone or in combination, and measured a response variable (percent cell viability in my case). First, I drew side-by-side boxplots for each case (drugs alone in different concentrations and drugs in combination applied with previously selected concentrations) using ggplot and I thought it was not so easy for the reader to interpret the data as he/she should be. Then, while I was reading Hands-On Machine Learning with R by Bradley Boehmke & Brandon Greenwell, I got an idea on how to better visualize my data. I decided to use scatter3D function in plot3D R package. Here is an example of one of my figures and the code chunk to produce this 3D plot:
 
 ```{r}
 library(readxl)
