@@ -9,9 +9,9 @@ tags:
   - Data Science
 ---
 
-Recently, I have been thinking on how to visualize my experimental data where I performed combination drug treatments on certain cancer cell lines, for a paper I am writing. In short, I used two different inhibitor molecules alone or in combination, and measured a response variable (percent cell viability in my case). First, I drew side-by-side boxplots for each case (drugs alone in different concentrations and drugs in combination applied with previously selected concentrations) using ggplot and I thought it was not so easy for the reader to interpret the data as he/she should be. Then, while I was reading Hands-On Machine Learning with R by Bradley Boehmke & Brandon Greenwell, I got an idea on how to better visualize my data. I decided to use scatter3D function in plot3D R package. Here is an example of one of my figures and the code chunk to produce this 3D plot:
+Recently, I have been thinking on how to visualize my experimental data where I performed combination drug treatments on certain cancer cell lines, for a paper I am writing. In short, I used two different inhibitor molecules alone or in combination, and measured a response variable (percent cell viability in my case). First, I drew side-by-side boxplots for each case (drugs alone in different concentrations and drugs in combination applied with previously selected concentrations) using ggplot and I thought it was not so easy for the reader to interpret the data as he/she should be. Then, while I was reading Hands-On Machine Learning with R [https://bradleyboehmke.github.io/HOML/] by Bradley Boehmke & Brandon Greenwell, I got an idea on how to better visualize my data. I decided to use scatter3D function in plot3D R package. Here is an example of one of my figures and the code chunk to produce this 3D plot:
 
-```{r}
+```{r, message=FALSE}
 library(readxl)
 library(tidyverse)
 library(plot3D)
@@ -21,25 +21,33 @@ library(plot3D)
 SRBdata <- read_excel("/Users/caglarberkel/Desktop/LAB/Experiment data/SRB data/CIS_BOR_OLA_all cells_SRB data.xlsx")
 ```
 
-```{r}
-df1 <- SRBdata %>% filter(CIS == 0) %>% filter(BOR == 0 | BOR == 10 | BOR == 20) %>% filter(OLA == 0 | OLA == 10 | OLA == 20) %>% filter(cellline == "OV2008")
+```{r, cache=TRUE}
+df1 <- SRBdata %>% filter(CIS == 0) %>% filter(BOR == 0 | BOR == 10 | BOR == 20) %>% 
+                   filter(OLA == 0 | OLA == 10 | OLA == 20) %>% 
+                   filter(cellline == "OV2008") 
 
 x <- df1$BOR
 y <- df1$OLA
 z <- df1$viability
+
 fit <- lm(z ~ x + y)
 
-grid.lines = 26
+grid.lines = 25
+
 x.pred <- seq(min(x), max(x), length.out = grid.lines)
 y.pred <- seq(min(y), max(y), length.out = grid.lines)
+
 xy <- expand.grid( x = x.pred, y = y.pred)
+
 z.pred <- matrix(predict(fit, newdata = xy), nrow = grid.lines, ncol = grid.lines)
 fitpoints <- predict(fit)
-g1 <- scatter3D(x, y, z, pch = 18, cex = 2, 
+
+scatter3D(x, y, z, pch = 18, cex = 2, 
            theta = 45, phi = 45, ticktype = "detailed",
            xlab = "BOR", ylab = "OLA", zlab = "% viability",  
            surf = list(x = x.pred, y = y.pred, z = z.pred,  
-                       facets = NA, fit = fitpoints), main = "OV2008")
+                       facets = NA, fit = fitpoints), main = "OV2008 cell line")
+
 fit$coefficients
 ```
 

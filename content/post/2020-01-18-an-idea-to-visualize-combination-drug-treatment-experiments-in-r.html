@@ -11,37 +11,36 @@ tags:
 
 
 
-<p>Recently, I have been thinking on how to visualize my experimental data where I performed combination drug treatments on certain cancer cell lines, for a paper I am writing. In short, I used two different inhibitor molecules alone or in combination, and measured a response variable (percent cell viability in my case). First, I drew side-by-side boxplots for each case (drugs alone in different concentrations and drugs in combination applied with previously selected concentrations) using ggplot and I thought it was not so easy for the reader to interpret the data as he/she should be. Then, while I was reading Hands-On Machine Learning with R by Bradley Boehmke &amp; Brandon Greenwell, I got an idea on how to better visualize my data. I decided to use scatter3D function in plot3D R package. Here is an example of one of my figures and the code chunk to produce this 3D plot:</p>
+<p>Recently, I have been thinking on how to visualize my experimental data where I performed combination drug treatments on certain cancer cell lines, for a paper I am writing. In short, I used two different inhibitor molecules alone or in combination, and measured a response variable (percent cell viability in my case). First, I drew side-by-side boxplots for each case (drugs alone in different concentrations and drugs in combination applied with previously selected concentrations) using ggplot and I thought it was not so easy for the reader to interpret the data as he/she should be. Then, while I was reading Hands-On Machine Learning with R [<a href="https://bradleyboehmke.github.io/HOML/" class="uri">https://bradleyboehmke.github.io/HOML/</a>] by Bradley Boehmke &amp; Brandon Greenwell, I got an idea on how to better visualize my data. I decided to use scatter3D function in plot3D R package. Here is an example of one of my figures and the code chunk to produce this 3D plot:</p>
 <pre class="r"><code>library(readxl)
-library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ────────────────────────────────────────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
-<pre><code>## ✓ ggplot2 3.2.1     ✓ purrr   0.3.3
-## ✓ tibble  2.1.3     ✓ dplyr   0.8.3
-## ✓ tidyr   1.0.0     ✓ stringr 1.4.0
-## ✓ readr   1.3.1     ✓ forcats 0.4.0</code></pre>
-<pre><code>## ── Conflicts ───────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>library(plot3D)</code></pre>
+library(tidyverse)
+library(plot3D)</code></pre>
 <pre class="r"><code>SRBdata &lt;- read_excel(&quot;/Users/caglarberkel/Desktop/LAB/Experiment data/SRB data/CIS_BOR_OLA_all cells_SRB data.xlsx&quot;)</code></pre>
-<pre class="r"><code>df1 &lt;- SRBdata %&gt;% filter(CIS == 0) %&gt;% filter(BOR == 0 | BOR == 10 | BOR == 20) %&gt;% filter(OLA == 0 | OLA == 10 | OLA == 20) %&gt;% filter(cellline == &quot;OV2008&quot;)
+<pre class="r"><code>df1 &lt;- SRBdata %&gt;% filter(CIS == 0) %&gt;% filter(BOR == 0 | BOR == 10 | BOR == 20) %&gt;% 
+                   filter(OLA == 0 | OLA == 10 | OLA == 20) %&gt;% 
+                   filter(cellline == &quot;OV2008&quot;) 
 
 x &lt;- df1$BOR
 y &lt;- df1$OLA
 z &lt;- df1$viability
+
 fit &lt;- lm(z ~ x + y)
 
-grid.lines = 26
+grid.lines = 25
+
 x.pred &lt;- seq(min(x), max(x), length.out = grid.lines)
 y.pred &lt;- seq(min(y), max(y), length.out = grid.lines)
+
 xy &lt;- expand.grid( x = x.pred, y = y.pred)
+
 z.pred &lt;- matrix(predict(fit, newdata = xy), nrow = grid.lines, ncol = grid.lines)
 fitpoints &lt;- predict(fit)
-g1 &lt;- scatter3D(x, y, z, pch = 18, cex = 2, 
+
+scatter3D(x, y, z, pch = 18, cex = 2, 
            theta = 45, phi = 45, ticktype = &quot;detailed&quot;,
            xlab = &quot;BOR&quot;, ylab = &quot;OLA&quot;, zlab = &quot;% viability&quot;,  
            surf = list(x = x.pred, y = y.pred, z = z.pred,  
-                       facets = NA, fit = fitpoints), main = &quot;OV2008&quot;)</code></pre>
+                       facets = NA, fit = fitpoints), main = &quot;OV2008 cell line&quot;)</code></pre>
 <p><img src="//post/2020-01-18-an-idea-to-visualize-combination-drug-treatment-experiments-in-r_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <pre class="r"><code>fit$coefficients</code></pre>
 <pre><code>## (Intercept)           x           y 
