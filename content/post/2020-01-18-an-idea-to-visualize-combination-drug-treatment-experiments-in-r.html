@@ -9,19 +9,29 @@ categories: Data science
 
 
 
+<div style="text-align: justify">
 <p>Recently, I have been thinking on how to visualize my experimental data where I performed combination drug treatments on certain cancer cell lines, for a paper I am writing. In short, I used two different inhibitor molecules alone or in combination, and measured a response variable (percent cell viability in my case). First, I drew side-by-side boxplots for each case (drugs alone in different concentrations and drugs in combination applied with previously selected concentrations) using ggplot and I thought it was not so easy for the reader to interpret the data as he/she should be. Then, while I was reading Hands-On Machine Learning with R [<a href="https://bradleyboehmke.github.io/HOML/" class="uri">https://bradleyboehmke.github.io/HOML/</a>] by Bradley Boehmke &amp; Brandon Greenwell, I got an idea on how to better visualize my data. I decided to use scatter3D function in plot3D R package. Here is an example of one of my figures and the code chunk to produce this 3D plot:</p>
+</div>
 <pre class="r"><code>library(readxl)
 library(tidyverse)
 library(plot3D)
 library(knitr)</code></pre>
-<pre class="r"><code>SRBdata &lt;- read_excel(&quot;/Users/caglarberkel/Desktop/LAB/Experiment data/SRB data/CIS_BOR_OLA_all cells_SRB data.xlsx&quot;)</code></pre>
-<pre class="r"><code>df1 &lt;- SRBdata %&gt;% filter(CIS == 0) %&gt;% filter(BOR == 0 | BOR == 10 | BOR == 20) %&gt;% 
+<pre class="r"><code># read experimental data into R from excel file
+
+SRBdata &lt;- read_excel(&quot;/Users/caglarberkel/Desktop/LAB/Experiment data/SRB data/CIS_BOR_OLA_all cells_SRB data.xlsx&quot;)</code></pre>
+<pre class="r"><code># filter certain drugs, certain concentrations and a particular cell line
+
+df1 &lt;- SRBdata %&gt;% filter(CIS == 0) %&gt;% filter(BOR == 0 | BOR == 10 | BOR == 20) %&gt;% 
                    filter(OLA == 0 | OLA == 10 | OLA == 20) %&gt;% 
                    filter(cellline == &quot;OV2008&quot;) 
+
+# define response (z) and predictor variables (x and y)
 
 x &lt;- df1$BOR
 y &lt;- df1$OLA
 z &lt;- df1$viability
+
+# fit data using a linear model
 
 fit &lt;- lm(z ~ x + y)
 
@@ -30,9 +40,10 @@ grid.lines = 25
 x.pred &lt;- seq(min(x), max(x), length.out = grid.lines)
 y.pred &lt;- seq(min(y), max(y), length.out = grid.lines)
 
-xy &lt;- expand.grid( x = x.pred, y = y.pred)
+xy &lt;- expand.grid(x = x.pred, y = y.pred)
 
 z.pred &lt;- matrix(predict(fit, newdata = xy), nrow = grid.lines, ncol = grid.lines)
+
 fitpoints &lt;- predict(fit)
 
 scatter3D(x, y, z, pch = 18, cex = 2, 
@@ -40,5 +51,5 @@ scatter3D(x, y, z, pch = 18, cex = 2,
            xlab = &quot;BOR&quot;, ylab = &quot;OLA&quot;, zlab = &quot;% viability&quot;,  
            surf = list(x = x.pred, y = y.pred, z = z.pred,  
                        facets = NA, fit = fitpoints), main = &quot;OV2008 cell line&quot;)</code></pre>
-<pre class="r"><code>knitr::include_graphics(&quot;/images/unnamed-chunk-3-1.png&quot;)</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;/images/unnamed-chunk-3-1.png&quot;) </code></pre>
 <p><img src="/images/unnamed-chunk-3-1.png" /><!-- --></p>
