@@ -21,7 +21,7 @@ library(plot3D)
 SRBdata <- read_excel("/Users/caglarberkel/Desktop/LAB/Experiment data/SRB data/CIS_BOR_OLA_all cells_SRB data.xlsx")
 ```
 
-```{r, cache=TRUE}
+```{r}
 df1 <- SRBdata %>% filter(CIS == 0) %>% filter(BOR == 0 | BOR == 10 | BOR == 20) %>% 
                    filter(OLA == 0 | OLA == 10 | OLA == 20) %>% 
                    filter(cellline == "OV2008") 
