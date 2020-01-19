@@ -49,7 +49,7 @@ scatter3D(x, y, z, pch = 18, cex = 2,
 ```
 
 ```{r}
-knitr::include_graphics("/images/unnamed-chunk-3-1.png")
+knitr::include_graphics("/images/unnamed-chunk-3-1.png") 
 ```
 
 
